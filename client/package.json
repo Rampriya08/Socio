@@ -1,0 +1,77 @@
+{
+  "name": "client",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@heroicons/react": "^2.2.0",
+    "@mui/icons-material": "^6.3.1",
+    "@mui/material": "^6.4.2",
+    "@reduxjs/toolkit": "^2.5.0",
+    "@shadcn/ui": "^0.0.4",
+    "@tensorflow/tfjs": "^4.22.0",
+    "apos-to-lex-form": "^1.0.5",
+    "axios": "^1.7.9",
+    "buffer": "^6.0.3",
+    "compromise": "^14.14.4",
+    "cra-template": "1.2.0",
+    "crypto-browserify": "^3.12.1",
+    "date-fns": "^4.1.0",
+    "framer-motion": "^12.0.11",
+    "jsonwebtoken": "^9.0.2",
+    "lucide-react": "^0.474.0",
+    "moment": "^2.30.1",
+    "natural": "^8.0.1",
+    "react": "^19.0.0",
+    "react-datepicker": "^8.0.0",
+    "react-datetime-picker": "^6.0.1",
+    "react-dom": "^19.0.0",
+    "react-dropzone": "^14.3.5",
+    "react-feather": "^2.0.10",
+    "react-hot-toast": "^2.5.1",
+    "react-icons": "^5.4.0",
+    "react-redux": "^9.2.0",
+    "react-router-dom": "^7.1.1",
+    "react-scripts": "5.0.1",
+    "redux-persist": "^6.0.0",
+    "sentiment": "^5.0.2",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
+    "spelling-corrector": "^3.0.0",
+    "stopword": "^3.1.4",
+    "stream-browserify": "^3.0.0",
+    "tailwindcss": "^3.4.17",
+    "util": "^0.12.5",
+    "web-vitals": "^4.2.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "browser": {
+    "crypto": false,
+    "stream": false,
+    "buffer": false
+  }
+}

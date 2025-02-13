@@ -1,0 +1,33 @@
+digraph ER_Diagram {
+	User [label="User
+- id (PK)
+- username
+- email
+- password
+- gender
+- profile_picture
+- bio
+- followers
+- following"]
+	Message [label="Message
+- id (PK)
+- senderId (FK)
+- receiverId (FK)
+- text
+- image
+- created_at
+- updated_at"]
+	Post [label="Post
+- id (PK)
+- username (FK)
+- image_url
+- caption
+- likes_count
+- liked_by
+- created_at
+- updated_at"]
+	User -> Message [label="1-to-M (sender/receiver)"]
+	User -> Post [label="1-to-M (creator)"]
+	User -> User [label="M-to-M (followers/following)"]
+	User -> Post [label="M-to-M (likes)"]
+}
