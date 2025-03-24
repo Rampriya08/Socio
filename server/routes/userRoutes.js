@@ -117,42 +117,82 @@ router.get("/:username", async (req, res) => {
 });
 
 router.post("/:username/follow", async (req, res) => {
+  try {
     const { username } = req.params;
-    const { userId } = req.body; // ID of the logged-in user
+    const { userId } = req.body; // The logged-in user ID
 
-    try {
-        // Find the target user (the one to be followed) and the logged-in user
-        const targetUser = await User.findOne({ username });
-        const loggedInUser = await User.findById(userId);
-
-        console.log(username, userId);
-
-        if (!targetUser || !loggedInUser) {
-            return res.status(404).json({ message: "User not found" });
-        }
-
-        // Check if the logged-in user is already following the target user
-        if (targetUser.followers.includes(loggedInUser.username)) {
-            return res.status(400).json({ message: "You are already following this user" });
-        }
-
-        // Add the logged-in user's ID to the target user's followers list
-        targetUser.followers.push(loggedInUser.username);
-        targetUser.followersCount += 1;
-
-        // Add the target user's ID to the logged-in user's following list
-        loggedInUser.following.push(targetUser.username);
-        loggedInUser.followingCount += 1;
-
-        // Save both users
-        await Promise.all([targetUser.save(), loggedInUser.save()]);
-
-        res.status(200).json({ message: `You are now following ${username}` });
-    } catch (error) {
-        console.error("Error following user:", error);
-        res.status(500).json({ message: "Internal server error" });
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is required" });
     }
 
+    const userToFollow = await User.findOne({ username });
+    const currentUser = await User.findById(userId);
+
+    if (!userToFollow || !currentUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (currentUser.following.includes(userToFollow.username)) {
+      return res.status(400).json({ message: "You already follow this user" });
+    }
+
+    currentUser.following.push(userToFollow.username);
+    userToFollow.followers.push(currentUser.username);
+
+    currentUser.followingCount++;
+    userToFollow.followersCount++;
+
+    await currentUser.save();
+    await userToFollow.save();
+
+    res.json({ message: `You are now following ${username}` });
+  } catch (error) {
+    console.error("Error following user:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// Unfollow a user
+router.post("/:username/unfollow", async (req, res) => {
+  try {
+    const { username } = req.params;
+    const { userId } = req.body; // The logged-in user ID
+
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+
+    const userToUnfollow = await User.findOne({ username });
+    const currentUser = await User.findById(userId);
+
+    if (!userToUnfollow || !currentUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (!currentUser.following.includes(userToUnfollow.username)) {
+      return res
+        .status(400)
+        .json({ message: "You are not following this user" });
+    }
+
+    currentUser.following = currentUser.following.filter(
+      (name) => name !== userToUnfollow.username
+    );
+    userToUnfollow.followers = userToUnfollow.followers.filter(
+      (name) => name !== currentUser.username
+    );
+
+    currentUser.followingCount--;
+    userToUnfollow.followersCount--;
+
+    await currentUser.save();
+    await userToUnfollow.save();
+
+    res.json({ message: `You have unfollowed ${username}` });
+  } catch (error) {
+    console.error("Error unfollowing user:", error);
+    res.status(500).json({ message: "Server error" });
+  }
 });
 router.get("/:username/followers", async (req, res) => {
     try {

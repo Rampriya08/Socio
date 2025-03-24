@@ -1,4 +1,4 @@
-\import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import io from "socket.io-client";
 import { format } from "date-fns";
 import useOnlineUsers from "./OnlineUsers";
@@ -449,56 +449,71 @@ const Chatting = ({ selectedUser, unread }) => {
     };
 
     return (
-        <div className="chat-container flex flex-col h-full bg-white border rounded-lg">
-            <div className="chat-header p-4 bg-blue-600 text-white">
-                <div className="flex justify-between items-center">
-                    <h2 className="text-lg font-bold">
-                        {selectedUser ? selectedUser.username : "Loading..."}
-                    </h2>
-                </div>
-            </div>
-
-            <div className="chat-messages flex-1 overflow-y-auto p-4 bg-gray-50">
-                {renderMessages()}
-                {isTyping && (
-                    <div className="ml-4">
-                        <TypingIndicator
-                            username={selectedUser.username}
-                            emotion={typingEmotion}
-                        />
-                    </div>
-                )}
-
-                <div ref={messagesEndRef} />
-
-            </div>
-
-            <div className="chat-input p-4 bg-gray-200 flex items-center gap-2 border-t fixed bottom-0 w-full">
-                <input
-                    type="text"
-                    value={newMessage}
-                    onChange={(e) => {
-                        setNewMessage(e.target.value);
-                        handleTyping(e.target.value);
-                    }}
-                    placeholder="Type a message..."
-                    className="flex-1 p-2 border rounded-lg"
-                    onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                />
-                <input
-                    type="datetime-local"
-                    value={scheduleTime}
-                    onChange={(e) => setScheduleTime(e.target.value)}
-                    className="border rounded p-2 text-sm"
-                />
-                <button
-                    onClick={handleSendMessage}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                    Send
-                </button>
-            </div>
+      <div className="chat-container flex flex-col h-full border rounded-lg">
+        {/* Chat Header */}
+        <div className="chat-header p-4 bg-blue-600 text-white">
+          <div className="flex justify-between items-center">
+            <h2 className="text-lg font-bold">
+              {selectedUser ? selectedUser.username : "Loading..."}
+            </h2>
+          </div>
         </div>
+
+        {/* Chat Messages + Input Wrapper */}
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {/* Messages Section */}
+          <div className="chat-messages flex-1 overflow-y-auto p-4 bg-gray-50 pb-20">
+            {renderMessages()}
+            {isTyping && (
+              <div className="ml-4">
+                <TypingIndicator
+                  username={selectedUser.username}
+                  emotion={typingEmotion}
+                />
+              </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+
+          {/* Chat Input (Positioned at the Bottom) */}
+          <div className="chat-input p-4 bg-gray-200 w-full flex items-center gap-2 border-t">
+            {/* Message Input - Largest */}
+            <div className="flex-1">
+              <input
+                type="text"
+                value={newMessage}
+                onChange={(e) => {
+                  setNewMessage(e.target.value);
+                  handleTyping(e.target.value);
+                }}
+                placeholder="Type a message..."
+                className="w-full p-3 border rounded-lg"
+                onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+              />
+            </div>
+
+            {/* DateTime Picker - Small */}
+            <div className="w-1/5 min-w-[130px]">
+              <input
+                type="datetime-local"
+                value={scheduleTime}
+                onChange={(e) => setScheduleTime(e.target.value)}
+                className="w-full border rounded p-2 text-sm"
+              />
+            </div>
+
+            {/* Send Button - Small */}
+            <div className="w-1/6 min-w-[100px]">
+              <button
+                onClick={handleSendMessage}
+                className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Send
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     );
 };
 

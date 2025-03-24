@@ -170,54 +170,56 @@ const Sidebar = ({ onUserSelect, onUnread }) => {
     };
 
     return (
-        <div className="sidebar p-4 bg-gray-50 h-full">
-            <h2 className="text-lg font-bold mb-4">Users</h2>
-            <ul>
-                {users.map((user) => (
-                    <li
-                        key={user._id}
-                        className={`user flex items-center mb-4 cursor-pointer hover:bg-gray-100 p-2 rounded-lg relative ${selectedUser === user._id ? 'bg-gray-100' : ''
+      <div className="sidebar p-4  h-full w-full  overflow-y-auto border-r border-gray-300">
+        <h2 className="text-lg font-bold mb-4 text-gray-700">Users</h2>
+        <ul className="space-y-2">
+          {users.map((user) => (
+            <li
+              key={user._id}
+              className={`user flex items-center p-2 rounded-lg cursor-pointer transition 
+                            duration-200 hover:bg-gray-200 ${
+                              selectedUser === user._id ? "bg-gray-200" : ""
                             }`}
-                        onClick={() => handleUserClick(user)}
-                    >
-                        <div className="flex items-center relative mr-4">
-                            <img
-                                src={user.profile_picture}
-                                alt={user.username}
-                                className="w-10 h-10 rounded-full object-cover"
-                            />
-                            {
-                                isUserOnline(user._id) && (
-                                    <div className="absolute -right-1 top-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
-                                )
-                            }
-                        </div>
-                        <div className="flex flex-col flex-grow">
-                            <span className="font-medium">{user.username}</span>
-                            {user.latestMessage ? (
-                                <span className="text-sm text-gray-500 truncate max-w-[200px]">
-                                    {user.latestMessage.content}
-                                </span>
-                            ) : (
-                                <span className="text-sm text-gray-400">No messages</span>
-                            )}
-                        </div>
-                        <div className="flex flex-col items-end ml-2">
-                            {user.latestMessage && (
-                                <span className="text-xs text-gray-500">
-                                    {formatTimestamp(user.latestMessage.timestamp)}
-                                </span>
-                            )}
-                            {unreadCounts[user._id] > 0 && (
-                                <span className="bg-red-500 text-white text-xs rounded-full px-2 py-1 mt-1">
-                                    {unreadCounts[user._id]}
-                                </span>
-                            )}
-                        </div>
-                    </li>
-                ))}
-            </ul>
-        </div>
+              onClick={() => handleUserClick(user)}
+            >
+              <div className="relative flex-shrink-0">
+                <img
+                  src={user.profile_picture}
+                  alt={user.username}
+                  className="w-12 h-12 rounded-full object-cover border border-gray-300"
+                />
+                {isUserOnline(user._id) && (
+                  <span className="absolute -right-1 -top-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></span>
+                )}
+              </div>
+              <div className="flex flex-col flex-grow ml-3">
+                <span className="font-medium text-gray-800 truncate max-w-[150px] sm:max-w-none">
+                  {user.username}
+                </span>
+                {user.latestMessage ? (
+                  <span className="text-sm text-gray-600 truncate max-w-[180px] sm:max-w-none">
+                    {user.latestMessage.content}
+                  </span>
+                ) : (
+                  <span className="text-sm text-gray-400">No messages</span>
+                )}
+              </div>
+              <div className="flex flex-col items-end ml-2">
+                {user.latestMessage && (
+                  <span className="text-xs text-gray-500">
+                    {formatTimestamp(user.latestMessage.timestamp)}
+                  </span>
+                )}
+                {unreadCounts[user._id] > 0 && (
+                  <span className="bg-red-500 text-white text-xs rounded-full px-2 py-1 mt-1">
+                    {unreadCounts[user._id]}
+                  </span>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
     );
 };
 

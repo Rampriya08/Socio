@@ -25,32 +25,50 @@ const upload = multer({ storage: storage });
 
 // CREATE a new post
 router.post("/add", upload.single("picture"), createPost); 
-router.post('/:id/like', async (req, res) => {
-    try {
-        const postId = req.params.id;
-        const username = req.body.username; // Username of the user liking the post
+router.post("/:id/like", async (req, res) => {
+  const { id } = req.params;
+  const { username } = req.body;
 
-        // Find the post
-        const post = await Post.findById(postId);
-        if (!post) {
-            return res.status(404).json({ error: 'Post not found' });
-        }
+  try {
+    const post = await Post.findById(id);
+    if (!post) return res.status(404).json({ message: "Post not found" });
 
-        // Check if the user has already liked the post
-        if (post.liked_by.includes(username)) {
-            return res.status(400).json({ error: 'You have already liked this post' });
-        }
-
-        // Add the user to the liked_by list and increment the likes count
-        post.liked_by.push(username);
-        post.likes_count += 1;
-        await post.save();
-
-        res.status(200).json({ message: 'Post liked successfully', post });
-    } catch (error) {
-        console.error('Error liking the post:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+    if (!post.liked_by.includes(username)) {
+      post.liked_by.push(username);
+      post.likes_count += 1;
+      await post.save();
+      return res
+        .status(200)
+        .json({ message: "Post liked", likes_count: post.likes_count });
     }
+
+    res.status(400).json({ message: "Post already liked" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+
+router.post("/:id/unlike", async (req, res) => {
+  const { id } = req.params;
+  const { username } = req.body;
+
+  try {
+    const post = await Post.findById(id);
+    if (!post) return res.status(404).json({ message: "Post not found" });
+
+    if (post.liked_by.includes(username)) {
+      post.liked_by = post.liked_by.filter((user) => user !== username);
+      post.likes_count -= 1;
+      await post.save();
+      return res
+        .status(200)
+        .json({ message: "Post unliked", likes_count: post.likes_count });
+    }
+
+    res.status(400).json({ message: "Post not liked yet" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
 });
    
 router.get("/", async (req, res) => {

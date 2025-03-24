@@ -12,7 +12,6 @@ const Login = () => {
         const user = localStorage.getItem('user');
 
         if (token && user) {
-            
             navigate('/home'); // Redirect to the home page
         }
     }, [navigate]);

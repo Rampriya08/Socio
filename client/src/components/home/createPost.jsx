@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Box, TextField, IconButton, Button, Typography } from "@mui/material";
-import ImageIcon from "@mui/icons-material/Image";
-import AttachmentIcon from "@mui/icons-material/AttachFile";
-import MicIcon from "@mui/icons-material/Mic";
 import ClipIcon from "@mui/icons-material/Videocam";
 import Dropzone from "react-dropzone";
 import { useNavigate } from "react-router-dom";
+import {
+  useTheme,
+} from "@mui/material";
+import {
+  Image as ImageIcon,
+  AttachFile as AttachmentIcon,
+  Mic as MicIcon,
+} from "@mui/icons-material";
 
 const CreatePost = ({ onPostCreated }) => {
     const navigate = useNavigate();
@@ -14,7 +19,8 @@ const CreatePost = ({ onPostCreated }) => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [showDropzone, setShowDropzone] = useState(false);
     const [profilePic, setProfilePic] = useState("");
-
+ const theme = useTheme();
+ const isDarkMode = theme.palette.mode === "dark";
 
     useEffect(() => {
         const fetchUserProfile = async () => {
@@ -82,93 +88,100 @@ const CreatePost = ({ onPostCreated }) => {
         }
     };
     return (
-        <Box
-            sx={{
-                border: "1px solid #ccc",
-                borderRadius: "8px",
-                p: 2,
-                width: "100%",
-                maxWidth: "600px",
-                margin: "0 auto",
+      <Box
+        sx={{
+          border: `1px solid ${isDarkMode ? "#555" : "#ccc"}`,
+          borderRadius: "8px",
+          p: 2,
+          width: "100%",
+          maxWidth: "600px",
+          margin: "0 auto",
+          backgroundColor: isDarkMode ? "#121212" : "#fff", // Dark mode background fix
+          color: isDarkMode ? "#e0e0e0" : "#000", // Text color fix
+        }}
+      >
+        {/* Input Section */}
+        <Box display="flex" alignItems="center" mb={2}>
+          <img
+            src={profilePic}
+            alt="profile"
+            style={{
+              borderRadius: "50%",
+              width: "50px",
+              height: "50px",
+              marginRight: "10px",
             }}
-        >
-            {/* Input Section */}
-            <Box display="flex" alignItems="center" mb={2}>
-                <img
-                    src={profilePic } // Use placeholder if profilePic is not available
-                    alt="profile"
-                    style={{
-                        borderRadius: "50%",
-                        width: "50px",
-                        height: "50px",
-                        marginRight: "10px",
-                    }}
-                />
-                <TextField
-                    fullWidth
-                    placeholder="What's on your mind..."
-                    value={text}
-                    onChange={(e) => setText(e.target.value)}
-                    sx={{ borderRadius: "8px" }}
-                />
-            </Box>
-
-            {/* Conditional Dropzone */}
-            {showDropzone && (
-                <Dropzone onDrop={handleFileUpload}>
-                    {({ getRootProps, getInputProps }) => (
-                        <Box
-                            {...getRootProps()}
-                            sx={{
-                                border: "1px dashed #ccc",
-                                borderRadius: "8px",
-                                p: 2,
-                                textAlign: "center",
-                                mb: 2,
-                                cursor: "pointer",
-                            }}
-                        >
-                            <input {...getInputProps()} />
-                            <Typography>Add Image Here</Typography>
-                        </Box>
-                    )}
-                </Dropzone>
-            )}
-
-            {/* Display Uploaded File */}
-            {selectedFile && (
-                <Box
-                    sx={{
-                        border: "1px dashed #ccc",
-                        borderRadius: "8px",
-                        p: 2,
-                        textAlign: "center",
-                        mb: 2,
-                    }}
-                >
-                    <Typography>{selectedFile.name}</Typography>
-                </Box>
-            )}
-
-            {/* Actions */}
-            <Box display="flex" justifyContent="space-between" alignItems="center">
-                <IconButton onClick={() => setShowDropzone(!showDropzone)}>
-                    <ImageIcon />
-                </IconButton>
-                <IconButton>
-                    <ClipIcon />
-                </IconButton>
-                <IconButton>
-                    <AttachmentIcon />
-                </IconButton>
-                <IconButton>
-                    <MicIcon />
-                </IconButton>
-                <Button variant="contained" color="primary" onClick={handleSubmit}>
-                    Post
-                </Button>
-            </Box>
+          />
+          <TextField
+            fullWidth
+            placeholder="What's on your mind..."
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            sx={{
+              borderRadius: "8px",
+              backgroundColor: isDarkMode ? "#333" : "#f0f0f0",
+              "& .MuiInputBase-input": {
+                color: isDarkMode ? "#fff" : "#000", // Fix input text color
+              },
+            }}
+          />
         </Box>
+
+        {/* Conditional Dropzone */}
+        {showDropzone && (
+          <Dropzone onDrop={handleFileUpload}>
+            {({ getRootProps, getInputProps }) => (
+              <Box
+                {...getRootProps()}
+                sx={{
+                  border: `1px dashed ${isDarkMode ? "#aaa" : "#ccc"}`,
+                  borderRadius: "8px",
+                  p: 2,
+                  textAlign: "center",
+                  mb: 2,
+                  cursor: "pointer",
+                  backgroundColor: isDarkMode ? "#444" : "#fafafa",
+                }}
+              >
+                <input {...getInputProps()} />
+                <Typography>Add Image Here</Typography>
+              </Box>
+            )}
+          </Dropzone>
+        )}
+
+        {/* Display Uploaded File */}
+        {selectedFile && (
+          <Box
+            sx={{
+              border: `1px dashed ${isDarkMode ? "#aaa" : "#ccc"}`,
+              borderRadius: "8px",
+              p: 2,
+              textAlign: "center",
+              mb: 2,
+              backgroundColor: isDarkMode ? "#444" : "#fafafa",
+            }}
+          >
+            <Typography>{selectedFile.name}</Typography>
+          </Box>
+        )}
+
+        {/* Actions */}
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <IconButton onClick={() => setShowDropzone(!showDropzone)}>
+            <ImageIcon sx={{ color: isDarkMode ? "#e0e0e0" : "#000" }} />
+          </IconButton>
+          <IconButton>
+            <AttachmentIcon sx={{ color: isDarkMode ? "#e0e0e0" : "#000" }} />
+          </IconButton>
+          <IconButton>
+            <MicIcon sx={{ color: isDarkMode ? "#e0e0e0" : "#000" }} />
+          </IconButton>
+          <Button variant="contained" color="primary" onClick={handleSubmit}>
+            Post
+          </Button>
+        </Box>
+      </Box>
     );
 };
 
