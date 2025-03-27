@@ -7,7 +7,7 @@ const router = express.Router();
 
 // User Registration
 router.post("/register", async (req, res) => {
-    const { username, email, password, gender } = req.body;
+    const { username, email, password, gender,bio } = req.body;
 
     try {
         // Check if user already exists
@@ -29,6 +29,7 @@ router.post("/register", async (req, res) => {
             password: hashedPassword,
             gender,
             profile_picture: profilePicture,
+            bio,
         });
 
         await newUser.save();
@@ -90,7 +91,23 @@ router.post("/login", async (req, res) => {
 
 
 
+router.get("/s/search", async (req, res) => {
+  try {
+    const query = req.query.q;
+    console.log(query, "--");
+    if (!query) {
+      return res.status(400).json({ message: "Query is required" });
+    }
 
+    const users = await User.find({
+      username: { $regex: query, $options: "i" }, // Case-insensitive search
+    }).select("username _id"); // Only return necessary fields
+
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: "Server Error" });
+  }
+});
 // Route to fetch user data by user ID
 router.get("/:username", async (req, res) => {
 
@@ -394,4 +411,5 @@ router.get('/:userId/mutual-followers/:profile', async (req, res) => {
         }
     }
 });
+
 module.exports = router;

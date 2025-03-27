@@ -6,7 +6,7 @@ import {
   ChatBubbleOvalLeftIcon,
   PaperAirplaneIcon,
 } from "@heroicons/react/24/outline";
-import toast from "react-hot-toast";
+import showToast from '../toast';
 import { HeartIcon as HeartSolid } from "@heroicons/react/24/solid"; 
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -22,10 +22,56 @@ const UserProfile = ({ refreshTrigger, onFollowUpdate, onLikeUpdate }) => {
   const [profilePics, setProfilePics] = useState({});
   const userId = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
-const tabVariants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
-};
+
+
+   const tabVariants = {
+     hidden: {
+       opacity: 0,
+       rotateX: -15,
+       scale: 0.9,
+       y: 20,
+       transition: {
+         duration: 0.4,
+         ease: "easeInOut",
+       },
+     },
+     visible: {
+       opacity: 1,
+       rotateX: 0,
+       scale: 1,
+       y: 0,
+       transition: {
+         duration: 0.6,
+         ease: "easeOut",
+       },
+     },
+   };
+
+   // Button animation variants with standard easing
+   const buttonVariants = {
+     rest: {
+       scale: 1,
+       transition: {
+         duration: 0.3,
+         ease: "easeInOut",
+       },
+     },
+     hover: {
+       scale: 1.05,
+       transition: {
+         duration: 0.3,
+         ease: "easeInOut",
+       },
+     },
+     tap: {
+       scale: 0.95,
+       transition: {
+         duration: 0.2,
+         ease: "easeInOut",
+       },
+     },
+   };
+
 
 
   // Function to fetch profile picture for a given user
@@ -47,7 +93,7 @@ const tabVariants = {
       fetchProfilesForUsers(response.data);
     } catch (error) {
       console.error("Error updating like status:", error);
-      toast.error("Something went wrong. Try again.");
+      showToast("error","Something went wrong. Try again.");
     }
   }
    const fetchFollowing  = async () => {
@@ -59,7 +105,7 @@ const tabVariants = {
        fetchProfilesForUsers(response.data);
      } catch (error) {
        console.error("Error updating like status:", error);
-       toast.error("Something went wrong. Try again.");
+       showToast("error","Something went wrong. Try again.");
      }
    };
   const fetchProfilePic = async (username) => {
@@ -86,7 +132,7 @@ const tabVariants = {
   const handleLike = async (postId, isLiked) => {
     if (!userId || !userId.username) {
       console.error("User not logged in or username missing.");
-      toast.error("Please log in to like posts.");
+      showToast("error","Please log in to like posts.");
       return;
     }
 
@@ -111,11 +157,11 @@ const tabVariants = {
         )
       );
 
-      toast.success(isLiked ? "Post unliked!" : "Post liked!");
+      showToast("success",isLiked ? "Post unliked!" : "Post liked!");
       onLikeUpdate();
     } catch (error) {
       console.error("Error updating like status:", error);
-      toast.error("Something went wrong. Try again.");
+      showToast("error","Something went wrong. Try again.");
     }
   };
 
@@ -123,7 +169,7 @@ const tabVariants = {
   const handleFollowUnfollow = async (username) => {
     try {
       if (!userId) {
-        toast.error("User not logged in");
+        showToast("error","User not logged in");
         return;
       }
 
@@ -134,7 +180,7 @@ const tabVariants = {
 
       const response = await axios.post(url, { userId: userId.id });
 
-      toast.success(response.data.message);
+      showToast("success",response.data.message);
 
       // Update the following list dynamically
       setFollowing((prev) =>
@@ -146,7 +192,7 @@ const tabVariants = {
       onFollowUpdate();
     } catch (error) {
       console.error(`Error following/unfollowing ${username}:`, error);
-      toast.error("Error updating follow status");
+      showToast("error","Error updating follow status");
     }
   };
 
@@ -218,38 +264,17 @@ const tabVariants = {
     navigate(`/profile/${userId}`); // Navigate to the profile page with the user ID
   };
   return (
-    <div className="h-screen p-4 w-full ">
+    <div className="h-screen p-4 w-full  bg-gray-100 text-black dark:bg-gray-900 dark:text-white  ">
       {/* User Profile Header */}
       <div className="flex flex-col sm:flex-row items-center sm:justify-between space-y-4 sm:space-y-0">
         <h2 className="text-lg sm:text-xl font-bold">{userData.username}</h2>
-        <div className="flex items-center space-x-2">
-          <button className="text-sm font-semibold bg-gray-100 px-4 py-1 rounded-md">
-            Edit Profile
-          </button>
-          <button className="text-lg p-1 rounded-full bg-gray-200 hover:bg-gray-300">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 4.5v15m7.5-7.5h-15"
-              />
-            </svg>
-          </button>
-        </div>
       </div>
       {/* User Stats */}
-      <div className="mt-6 flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-10">
+      <div className="mt-6 flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-10   bg-gray-100 text-black dark:bg-gray-900 dark:text-white">
         <img
           src={userData.profile_picture || "https://via.placeholder.com/150"}
           alt="User profile"
-          className="w-24 sm:w-32 h-24 sm:h-32 rounded-full border-2 border-gray-300"
+          className="w-24 sm:w-32 h-24 sm:h-32 rounded-full"
         />
         <div className="flex justify-center sm:justify-start space-x-8">
           {[
@@ -258,217 +283,239 @@ const tabVariants = {
             { label: "Following", count: userData.followingCount },
           ].map((item, index) => (
             <div key={index} className="text-center">
-              <p className="text-sm font-bold">{item.count}</p>
-              <p className="text-xs text-gray-500">{item.label}</p>
+              <p className="text-md font-bold">{item.count}</p>
+              <p className="text-sm ">{item.label}</p>
             </div>
           ))}
         </div>
       </div>
       {/* Bio Section */}
       <div className="mt-4 text-center sm:text-left">
-        <p className="font-semibold">{userData.bioTitle || "No Title"}</p>
-        <p className="text-sm text-gray-600">
-          {userData.bio || "No bio available"}
-        </p>
+        <p className="text-md">{userData.bio || "No bio available"}</p>
       </div>
-       <div className="w-full max-w-3xl mx-auto p-4">
+
       {/* Tab Buttons with Wave Effect */}
-      <div className="mt-6 border-t pt-4 flex justify-around sm:justify-start sm:space-x-6">
-        {["posts", "followers", "following"].map((tab) => (
-          <button
-            key={tab}
-            className={`relative text-sm font-bold pb-2 transition-all duration-300 ${
-              activeTab === tab
-                ? "text-blue-500 scale-110"
-                : "text-gray-600 hover:text-black"
-            }`}
-            onClick={() => setActiveTab(tab)}
+      <div className="container mx-auto px-4">
+        <div className="mt-6 pt-4 flex justify-between items-center text-center  space-x-6">
+          {["posts", "followers", "following"].map((tab) => (
+            <motion.button
+              key={tab}
+              variants={buttonVariants}
+              initial="rest"
+              whileHover="hover"
+              whileTap="tap"
+              className={`center text-sm font-bold pb-2  transition-all duration-300 ${
+                activeTab === tab
+                  ? "text-bh font-extrabold"
+                  : "text-black dark:text-white hover:text-bh"
+              }`}
+              onClick={() => setActiveTab(tab)}
+            >
+              {tab.toUpperCase()}
+              {activeTab === tab && (
+                <motion.div
+                  layoutId="magical-underline"
+                  className="absolute left-0 right-0 bottom-0 h-1 bg-gradient-to-r from-bh-light to-bh-dark"
+                  initial={{ width: 0 }}
+                  animate={{ width: "100%" }}
+                  transition={{
+                    duration: 0.5,
+                    ease: "easeOut",
+                  }}
+                />
+              )}
+            </motion.button>
+          ))}
+        </div>
+
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab}
+            variants={tabVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            className="mt-8 w-full"
           >
-            {tab.toUpperCase()}
-            {activeTab === tab && (
+            <div className="mt-4 w-full max-w-full shadow-lg rounded-lg p-4 ">
+              {activeTab === "posts" && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 20 }}
+                  transition={{
+                    duration: 0.3,
+                    ease: "easeInOut",
+                  }}
+                  className="w-full"
+                >
+                  <div className="grid grid-cols-1 gap-4 w-full ">
+                    {userPosts.length > 0 ? (
+                      userPosts.map((post) => (
+                        <div
+                          key={post._id}
+                          className="w-full p-4 rounded-md bg-white text-black dark:bg-gray-800 hover:shadow-hover-right-bottom border-r-2 border-b-2 border-bh dark:hover:shadow-hover-right-bottom dark:text-white"
+                        >
+                          <div className="flex items-center space-x-4 mb-2">
+                            <img
+                              src={userData.profile_picture}
+                              alt={post.username}
+                              className="w-10 h-10 rounded-full"
+                            />
+                            <p className="font-bold">{post.username}</p>
+                          </div>
+                          <div className="flex flex-col items-center justify-center text-center w-full">
+                            {/* Post Image */}
+                            <img
+                              src={`http://localhost:5000${post.image_url}`}
+                              alt="Post"
+                              className="rounded-lg w-1/2 h-1/2"
+                            />
+                          </div>
+                          <p className="mt-2 w-full">{post.caption}</p>
+                          <div className="mt-4 flex justify-between w-full">
+                            <button
+                              onClick={() => handleLike(post._id, post.isLiked)}
+                              className="flex items-center space-x-1 hover:text-red-500"
+                            >
+                              {post.isLiked ? (
+                                <HeartSolid className="h-6 w-6 text-red-500" />
+                              ) : (
+                                <HeartOutline className="h-6 w-6" />
+                              )}
+                              <p>{post.likes_count} Likes</p>
+                            </button>
+                            <button className="hover:text-bh">
+                              <ChatBubbleOvalLeftIcon className="h-6 w-6 inline-block" />{" "}
+                              Comment
+                            </button>
+                            <button className="hover:text-bh">
+                              <PaperAirplaneIcon className="h-6 w-6 inline-block" />{" "}
+                              Share
+                            </button>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-center w-full">No posts available.</p>
+                    )}
+                  </div>
+                </motion.div>
+              )}
+            </div>{" "}
+            {/* Single column */}
+            {activeTab === "followers" && (
               <motion.div
-                layoutId="wave"
-                className="absolute left-0 right-0 bottom-0 h-[6px] bg-blue-500"
-                style={{
-                  borderRadius: "50%",
-                  clipPath: "path('M0,6 Q25,0 50,6 T100,6')", // Wavy Effect
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{
+                  duration: 0.3,
+                  ease: "easeInOut",
                 }}
-                initial={{ scaleX: 0, opacity: 0 }}
-                animate={{ scaleX: 1, opacity: 1 }}
-                exit={{ scaleX: 0, opacity: 0 }}
-                transition={{ duration: 0.4, ease: "easeInOut" }}
-              />
+                className="w-full"
+              >
+                <div className="grid grid-cols-1 gap-4 w-full">
+                  {followers.length > 0 ? (
+                    followers.map((follower) => (
+                      <div
+                        key={follower}
+                        className="w-full flex items-center justify-between p-4 rounded-md cursor-pointer bg-white text-black dark:bg-gray-800 dark:text-white dark:hover:bg-gray-800 transition duration-300 hover:shadow-hover-right-bottom border-r-2 border-b-2 border-bh dark:hover:shadow-hover-right-bottom"
+                      >
+                        <div className="w-full flex items-center justify-between">
+                          <div onClick={() => handleUserClick(follower)}>
+                            <div className="flex items-center gap-3">
+                              <img
+                                src={
+                                  profilePics[follower] ||
+                                  "https://via.placeholder.com/50"
+                                }
+                                alt={follower}
+                                className="w-12 h-12 rounded-full"
+                              />
+                              <p className="font-medium text-base">
+                                {follower}
+                              </p>
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => handleFollowUnfollow(follower)}
+                            className={`text-sm font-semibold px-4 py-1 rounded-md ${
+                              following.includes(follower)
+                                ? "bg-red-500 text-white "
+                                : "bg-bh  text-white dark:bg-bh-dark "
+                            }`}
+                          >
+                            {following.includes(follower)
+                              ? "Unfollow"
+                              : "Follow"}
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-center w-full">No followers found.</p>
+                  )}
+                </div>
+              </motion.div>
             )}
-          </button>
-        ))}
+            {activeTab === "following" && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{
+                  duration: 0.3,
+                  ease: "easeInOut",
+                }}
+                className="w-full"
+              >
+                <div className="grid grid-cols-1 gap-4 w-full">
+                  {following.length > 0 ? (
+                    following.map((followedUser) => (
+                      <div
+                        key={followedUser}
+                        className="w-full flex items-center justify-between p-4 rounded-md cursor-pointer bg-white text-black dark:bg-gray-800 dark:text-white transition duration-300 hover:shadow-hover-right-bottom border-r-2 border-b-2 border-bh dark:hover:shadow-hover-right-bottom"
+                      >
+                        <div className="w-full flex items-center justify-between">
+                          <div onClick={() => handleUserClick(followedUser)}>
+                            <div className="flex items-center gap-3">
+                              <img
+                                src={
+                                  profilePics[followedUser] ||
+                                  "https://via.placeholder.com/50"
+                                }
+                                alt={followedUser}
+                                className="w-12 h-12 rounded-full"
+                              />
+                              <p className="font-medium text-base">
+                                {followedUser}
+                              </p>
+                            </div>
+                          </div>
+                          <button
+                            className="text-sm font-semibold px-4 py-1 rounded-md bg-red-500 text-white transition duration-300"
+                            onClick={() => handleFollowUnfollow(followedUser)}
+                          >
+                            Unfollow
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-center w-full text-gray-500">
+                      No following yet.
+                    </p>
+                  )}
+                </div>
+              </motion.div>
+            )}
+          </motion.div>
+        </AnimatePresence>
       </div>
-
-      {/* Content Section with Animation */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={activeTab}
-          variants={tabVariants}
-          initial="hidden"
-          animate="visible"
-          exit="hidden"
-          className="mt-4"
-        >
-          {activeTab === "posts" && (
-            <div className="grid grid-cols-1 gap-4">
-            </div>
-          )}
-
-          {activeTab === "followers" && (
-            <div className="grid grid-cols-1 gap-4">
-            </div>
-          )}
-
-          {activeTab === "following" && (
-            <div className="grid grid-cols-1 gap-4">
-            </div>
-          )}
-        </motion.div>
-      </AnimatePresence>
-    </div>
       {/* Loading & Error Handling */}
       {loading && <div className="text-center mt-4">Loading...</div>}
       {error && <div className="text-red-500 text-center mt-4">{error}</div>}
-      {/* Content Section based on active tab */}
-      <div className="mt-4 w-full max-w-full bg-white  shadow-lg rounded-lg p-4 ">
-        {activeTab === "posts" && (
-          <div className="grid grid-cols-1 gap-4">
-            {" "}
-            {/* Updated to single-column */}
-            {userPosts.length > 0 ? (
-              userPosts.map((post) => (
-                <div
-                  key={post._id}
-                  className="p-4 border border-gray-200 rounded-md"
-                >
-                  <div className="flex items-center space-x-4 mb-2">
-                    <img
-                      src={userData.profile_picture}
-                      alt={post.username}
-                      className="w-10 h-10 rounded-full"
-                    />
-                    <p className="font-bold">{post.username}</p>
-                  </div>
-                  <div className="flex flex-col items-center justify-center text-center">
-                    {/* Post Image */}
-                    <img
-                      src={`http://localhost:5000${post.image_url}`}
-                      alt="Post"
-                      className="rounded-lg w-1/2 h-1/2"
-                    />
-                  </div>
-                  <p className="mt-2 text-gray-600">{post.caption}</p>
-                  <div className="mt-4 flex justify-between text-gray-500">
-                    <button
-                      onClick={() => handleLike(post._id, post.isLiked)}
-                      className="flex items-center space-x-1 text-gray-600 hover:text-red-500"
-                    >
-                      {post.isLiked ? (
-                        <HeartSolid className="h-6 w-6 text-red-500" />
-                      ) : (
-                        <HeartOutline className="h-6 w-6" />
-                      )}
-                      <p>{post.likes_count} Likes</p>
-                    </button>
-                    <button className="hover:text-black">
-                      <ChatBubbleOvalLeftIcon className="h-6 w-6 inline-block" />{" "}
-                      Comment
-                    </button>
-                    <button className="hover:text-black">
-                      <PaperAirplaneIcon className="h-6 w-6 inline-block" />{" "}
-                      Share
-                    </button>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p className="text-center col-span-full">No posts available.</p>
-            )}
-          </div>
-        )}
-
-        {activeTab === "followers" && (
-          <div className="grid grid-cols-1 gap-4">
-            {" "}
-            {/* Single column */}
-            {followers.length > 0 ? (
-              followers.map((follower) => (
-                <div
-                  key={follower}
-                  className="flex items-center justify-between p-4 border border-gray-200 rounded-md cursor-pointer hover:bg-gray-100 transition duration-300"
-                >
-                  <div onClick={() => handleUserClick(follower)}>
-                    <div className="flex items-center gap-3">
-                      <img
-                        src={
-                          profilePics[follower] ||
-                          "https://via.placeholder.com/50"
-                        }
-                        alt={follower}
-                        className="w-12 h-12 rounded-full"
-                      />
-                      <p className="font-medium text-base">{follower}</p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => handleFollowUnfollow(follower)}
-                    className={`text-sm font-semibold px-4 py-1 rounded-md ${
-                      following.includes(follower)
-                        ? "bg-red-500 text-white hover:bg-red-600"
-                        : "bg-blue-500 text-white hover:bg-blue-600"
-                    }`}
-                  >
-                    {following.includes(follower) ? "Unfollow" : "Follow"}
-                  </button>
-                </div>
-              ))
-            ) : (
-              <p className="text-center col-span-full">No followers found.</p>
-            )}
-          </div>
-        )}
-
-        {activeTab === "following" && (
-          <div className="grid grid-cols-1 gap-4">
-            {" "}
-            {/* Single column */}
-            {following.length > 0 ? (
-              following.map((followedUser) => (
-                <div
-                  key={followedUser}
-                  className="flex items-center justify-between p-4 border border-gray-200 rounded-md cursor-pointer hover:bg-gray-100 transition duration-300"
-                >
-                  <div onClick={() => handleUserClick(followedUser)}>
-                    <div className="flex items-center gap-3">
-                      <img
-                        src={
-                          profilePics[followedUser] ||
-                          "https://via.placeholder.com/50"
-                        }
-                        alt={followedUser}
-                        className="w-12 h-12 rounded-full"
-                      />
-                      <p className="font-medium text-base">{followedUser}</p>
-                    </div>
-                  </div>
-                  <button
-                    className="text-sm font-semibold px-3 py-1 rounded-md bg-red-500 text-white hover:bg-red-600 transition duration-300"
-                    onClick={() => handleFollowUnfollow(followedUser)}
-                  >
-                    Unfollow
-                  </button>
-                </div>
-              ))
-            ) : (
-              <p className="text-gray-500 text-center">No followers yet.</p>
-            )}
-          </div>
-        )}
-      </div>
     </div>
   );
 };

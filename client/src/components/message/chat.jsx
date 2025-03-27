@@ -13,8 +13,7 @@ const Chat = () => {
 
     return (
       <>
-      <Navbar />
-        <div className="flex h-screen w-full">
+        <div className="flex h-[90vh] w-full bg-white text-gray-900 dark:bg-gray-900 dark:text-white">
           {/* Sidebar */}
           <div className="w-1/4">
             <Sidebar onUserSelect={setSelectedUser} onUnread={setUnread} />
@@ -25,7 +24,7 @@ const Chat = () => {
             {selectedUser ? (
               <Chatting selectedUser={selectedUser} unread={unread || 0} />
             ) : (
-              <div className="flex items-center justify-center h-full w-full text-gray-500">
+              <div className="flex items-center justify-center h-full w-full ">
                 Select a user to start chatting
               </div>
             )}

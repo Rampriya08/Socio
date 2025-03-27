@@ -380,19 +380,22 @@ const Chatting = ({ selectedUser, unread }) => {
     };
 
     const renderMessages = () => {
-        if (loading) return <p className="text-gray-500">Loading messages...</p>;
-        if (messages.length === 0) return <p className="text-gray-500">No messages yet.</p>;
+        if (loading) return <p className="">Loading messages...</p>;
+        if (messages.length === 0) return <p className="">No messages yet.</p>;
 
         return messages.map((item, index) => {
             if (item.separator) {
                 return (
-                    <div key={`separator-${item.timestamp}`} className="flex items-center my-4">
-                        <div className="flex-1 border-t border-gray-300"></div>
-                        <span className="mx-4 px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm">
-                            {item.separator}
-                        </span>
-                        <div className="flex-1 border-t border-gray-300"></div>
-                    </div>
+                  <div
+                    key={`separator-${item.timestamp}`}
+                    className="flex items-center my-4"
+                  >
+                    <div className="flex-1 border-t dark:border-gray-300 border-gray-800"></div>
+                    <span className="mx-4 px-3 py-1 dark:bg-gray-300 dark:text-gray-800 bg-gray-700 text-white rounded-full text-sm">
+                      {item.separator}
+                    </span>
+                    <div className="flex-1 border-t dark:border-gray-300 border-gray-800"></div>
+                  </div>
                 );
             }
 
@@ -406,52 +409,60 @@ const Chatting = ({ selectedUser, unread }) => {
 
 
             return (
-                <React.Fragment key={item._id || index}>
-                    {showUnreadSeparator && (
-                        <div className="flex items-center my-4">
-                            <div className="flex-1 border-t border-gray-300"></div>
-                            <span className="mx-4 px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm">
-                                {unreadCountState} New Messages
-                            </span>
-                            <div className="flex-1 border-t border-gray-300"></div>
-                        </div>
-                    )}
-                    <div className={`flex ${item.senderId === user.id ? "justify-end" : "justify-start"}`}>
-                        <div className={`flex flex-col `}>
-
-                            <div className="flex items-center gap-1">
-                                {item.isSchedule && item.senderId === user.id && (
-                                    <Clock className="w-4 h-4 text-gray-500" />
-                                )}
-                                <p className={`rounded-lg px-3 py-2 mb-1 ${item.senderId === user.id ? "bg-blue-500 text-white" : "bg-gray-200 text-black"}`}>
-                                    {item.content}
-                                </p>
-                            </div>
-
-
-                            <span className="text-xs text-right mr-1">
-                                {item.timestamp ? formatTimestamp(item.timestamp) : ''}
-                            </span>
-                            {item.senderId === user.id && (
-                                <span className="text-xs text-right mr-1">
-                                    {item.read ? (
-                                        <span className="text-blue-500">✓✓</span>
-                                    ) : (
-                                        <span className="text-gray-400">✓</span>
-                                    )}
-                                </span>
-                            )}
-                        </div>
+              <React.Fragment key={item._id || index}>
+                {showUnreadSeparator && (
+                  <div className="flex items-center my-4">
+                    <div className="flex-1 border-t dark:border-gray-300 border-gray-800"></div>
+                    <span className="mx-4 px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm">
+                      {unreadCountState} New Messages
+                    </span>
+                    <div className="flex-1 border-t dark:border-gray-300 border-gray-800"></div>
+                  </div>
+                )}
+                <div
+                  className={`flex ${
+                    item.senderId === user.id ? "justify-end" : "justify-start"
+                  }`}
+                >
+                  <div className={`flex flex-col `}>
+                    <div className="flex items-center gap-1">
+                      {item.isSchedule && item.senderId === user.id && (
+                        <Clock className="w-4 h-4 " />
+                      )}
+                      <p
+                        className={`rounded-lg px-3 py-2 mb-1 ${
+                          item.senderId === user.id
+                            ? "bg-bh text-white"
+                            : "bg-gray-200 text-black "
+                        }`}
+                      >
+                        {item.content}
+                      </p>
                     </div>
-                </React.Fragment>
+
+                    <span className="text-xs text-right mr-1">
+                      {item.timestamp ? formatTimestamp(item.timestamp) : ""}
+                    </span>
+                    {item.senderId === user.id && (
+                      <span className="text-xs text-right mr-1">
+                        {item.read ? (
+                          <span className="text-blue-500">✓✓</span>
+                        ) : (
+                          <span className="text-gray-400">✓</span>
+                        )}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </React.Fragment>
             );
         }).filter(Boolean);
     };
 
     return (
-      <div className="chat-container flex flex-col h-full border rounded-lg">
+      <div className="chat-container flex flex-col h-full border dark:border-gray-700 dark:bg-gray-800 rounded-lg ">
         {/* Chat Header */}
-        <div className="chat-header p-4 bg-blue-600 text-white">
+        <div className="chat-header p-4 bg-bh text-white ">
           <div className="flex justify-between items-center">
             <h2 className="text-lg font-bold">
               {selectedUser ? selectedUser.username : "Loading..."}
@@ -462,7 +473,7 @@ const Chatting = ({ selectedUser, unread }) => {
         {/* Chat Messages + Input Wrapper */}
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Messages Section */}
-          <div className="chat-messages flex-1 overflow-y-auto p-4 bg-gray-50 pb-20">
+          <div className="chat-messages flex-1 overflow-y-auto  no-scrollbar p-4 pb-20">
             {renderMessages()}
             {isTyping && (
               <div className="ml-4">
@@ -476,7 +487,7 @@ const Chatting = ({ selectedUser, unread }) => {
           </div>
 
           {/* Chat Input (Positioned at the Bottom) */}
-          <div className="chat-input p-4 bg-gray-200 w-full flex items-center gap-2 border-t">
+          <div className="chat-input p-4  w-full flex items-center gap-2 border-t dark:border-gray-700">
             {/* Message Input - Largest */}
             <div className="flex-1">
               <input
@@ -487,18 +498,18 @@ const Chatting = ({ selectedUser, unread }) => {
                   handleTyping(e.target.value);
                 }}
                 placeholder="Type a message..."
-                className="w-full p-3 border rounded-lg"
+                className="w-full p-3 border dark:border-gray-700 dark:text-white dark:bg-gray-800  rounded-lg"
                 onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
               />
             </div>
 
             {/* DateTime Picker - Small */}
-            <div className="w-1/5 min-w-[130px]">
+            <div className="w-1/5 min-w-[130px]  text-black dark:text-white">
               <input
                 type="datetime-local"
                 value={scheduleTime}
                 onChange={(e) => setScheduleTime(e.target.value)}
-                className="w-full border rounded p-2 text-sm"
+                className="w-full border dark:border-gray-700 rounded p-2 text-sm dark:text-white dark:bg-gray-800"
               />
             </div>
 
@@ -506,7 +517,7 @@ const Chatting = ({ selectedUser, unread }) => {
             <div className="w-1/6 min-w-[100px]">
               <button
                 onClick={handleSendMessage}
-                className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                className="w-full bg-bh  text-white px-4 py-2 rounded-lg transition-colors"
               >
                 Send
               </button>

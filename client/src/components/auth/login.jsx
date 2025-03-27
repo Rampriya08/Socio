@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import showToast from '../toast';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -33,62 +34,68 @@ const Login = () => {
                 localStorage.setItem("token", result.token);
                 localStorage.setItem("user", JSON.stringify(result.user));
 
-                alert("Welcome back, " + result.user.username + "!");
+                showToast("success","Welcome back, " + result.user.username + "!");
                 navigate('/home'); // Redirect to home page
             } else {
-                alert("Login failed: Invalid response from server.");
+                showToast("error","Login failed: Invalid response from server.");
             }
         } catch (error) {
             console.error("Error logging in:", error);
-            alert("An error occurred. Please try again.");
+            showToast("error","An error occurred. Please try again.");
         }
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-gray-100">
-            <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-lg">
-                <h2 className="text-2xl font-semibold text-center text-gray-700 mb-6">Login</h2>
+      <div className="flex justify-center items-center min-h-screen  bg-white text-black dark:bg-gray-900 dark:text-white ">
+        <div className="w-full max-w-md p-6 rounded-lg  bg-gray-100 text-black dark:bg-gray-700 dark:text-white hover:shadow-hover-right-bottom border-r-2 border-b-2 border-bh dark:hover:shadow-hover-right-bottom">
+          <h2 className="text-2xl font-semibold text-center mb-6">Login</h2>
 
-                {/* Username Field */}
-                <div className="mb-4">
-                    <label htmlFor="username" className="block text-gray-600">Username</label>
-                    <input
-                        id="username"
-                        type="text"
-                        placeholder="Username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                </div>
+          {/* Username Field */}
+          <div className="mb-4">
+            <label htmlFor="username" className="block ">
+              Username
+            </label>
+            <input
+              id="username"
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full p-3 mt-2 border  rounded-md focus:outline-none focus:ring-2 focus:ring-bh"
+            />
+          </div>
 
-                {/* Password Field */}
-                <div className="mb-6">
-                    <label htmlFor="password" className="block text-gray-600">Password</label>
-                    <input
-                        id="password"
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                </div>
+          {/* Password Field */}
+          <div className="mb-6">
+            <label htmlFor="password" className="block">
+              Password
+            </label>
+            <input
+              id="password"
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full p-3 mt-2 border  rounded-md focus:outline-none focus:ring-2 focus:ring-bh"
+            />
+          </div>
 
-                {/* Login Button */}
-                <button
-                    onClick={handleLogin}
-                    className="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                    Login
-                </button>
+          {/* Login Button */}
+          <button
+            onClick={handleLogin}
+            className="w-full py-3 bg-bh font-semibold rounded-lg  focus:outline-none focus:ring-2 focus:ring-bh"
+          >
+            Login
+          </button>
 
-                {/* Register Link */}
-                <div className="mt-4 text-center">
-                    <a href="/register" className="text-blue-600 hover:underline">Don't have an account? Register</a>
-                </div>
-            </div>
+          {/* Register Link */}
+          <div className="mt-4 text-center">
+            <a href="/register" className="text-bh hover:underline">
+              Don't have an account? Register
+            </a>
+          </div>
         </div>
+      </div>
     );
 };
 

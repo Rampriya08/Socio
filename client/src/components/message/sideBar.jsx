@@ -170,15 +170,15 @@ const Sidebar = ({ onUserSelect, onUnread }) => {
     };
 
     return (
-      <div className="sidebar p-4  h-full w-full  overflow-y-auto border-r border-gray-300">
-        <h2 className="text-lg font-bold mb-4 text-gray-700">Users</h2>
+      <div className="sidebar p-4  h-full w-full  overflow-y-auto no-scrollbar">
+        <h2 className="text-lg font-bold mb-4 ">Users</h2>
         <ul className="space-y-2">
           {users.map((user) => (
             <li
               key={user._id}
               className={`user flex items-center p-2 rounded-lg cursor-pointer transition 
-                            duration-200 hover:bg-gray-200 ${
-                              selectedUser === user._id ? "bg-gray-200" : ""
+                            duration-200 hover:bg-gray-200 dark:hover:bg-gray-700 ${
+                              selectedUser === user._id ? "bg-gray-200 dark:bg-gray-700" : ""
                             }`}
               onClick={() => handleUserClick(user)}
             >
@@ -193,20 +193,20 @@ const Sidebar = ({ onUserSelect, onUnread }) => {
                 )}
               </div>
               <div className="flex flex-col flex-grow ml-3">
-                <span className="font-medium text-gray-800 truncate max-w-[150px] sm:max-w-none">
+                <span className="font-medium  truncate max-w-[150px] sm:max-w-none">
                   {user.username}
                 </span>
                 {user.latestMessage ? (
-                  <span className="text-sm text-gray-600 truncate max-w-[180px] sm:max-w-none">
+                  <span className="text-sm  truncate max-w-[180px] sm:max-w-none">
                     {user.latestMessage.content}
                   </span>
                 ) : (
-                  <span className="text-sm text-gray-400">No messages</span>
+                  <span className="text-sm ">No messages</span>
                 )}
               </div>
               <div className="flex flex-col items-end ml-2">
                 {user.latestMessage && (
-                  <span className="text-xs text-gray-500">
+                  <span className="text-xs ">
                     {formatTimestamp(user.latestMessage.timestamp)}
                   </span>
                 )}

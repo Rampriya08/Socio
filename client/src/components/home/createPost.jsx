@@ -12,6 +12,7 @@ import {
   AttachFile as AttachmentIcon,
   Mic as MicIcon,
 } from "@mui/icons-material";
+import showToast from "../toast";
 
 const CreatePost = ({ onPostCreated }) => {
     const navigate = useNavigate();
@@ -81,25 +82,14 @@ const CreatePost = ({ onPostCreated }) => {
             // Reset form
             setText("");
             setSelectedFile(null);
-            alert("Post created successfully!");
+            showToast("success","Post created successfully!");
         } catch (error) {
             console.error(error);
-            alert("Failed to create post. " + error);
+            showToast("error","Failed to create post. " + error);
         }
     };
     return (
-      <Box
-        sx={{
-          border: `1px solid ${isDarkMode ? "#555" : "#ccc"}`,
-          borderRadius: "8px",
-          p: 2,
-          width: "100%",
-          maxWidth: "600px",
-          margin: "0 auto",
-          backgroundColor: isDarkMode ? "#121212" : "#fff", // Dark mode background fix
-          color: isDarkMode ? "#e0e0e0" : "#000", // Text color fix
-        }}
-      >
+      <Box className=" bg-white mr-2 ml-2  text-black dark:bg-gray-800 dark:text-white p-4 pt-8 rounded-lg shadow-right-bottom hover:shadow-hover-right-bottom transition border-r-2 border-b-2 border-bh">
         {/* Input Section */}
         <Box display="flex" alignItems="center" mb={2}>
           <img
@@ -119,11 +109,8 @@ const CreatePost = ({ onPostCreated }) => {
             onChange={(e) => setText(e.target.value)}
             sx={{
               borderRadius: "8px",
-              backgroundColor: isDarkMode ? "#333" : "#f0f0f0",
-              "& .MuiInputBase-input": {
-                color: isDarkMode ? "#fff" : "#000", // Fix input text color
-              },
             }}
+            className=" bg-white text-black dark:bg-gray-900 dark:text-white "
           />
         </Box>
 
@@ -177,7 +164,10 @@ const CreatePost = ({ onPostCreated }) => {
           <IconButton>
             <MicIcon sx={{ color: isDarkMode ? "#e0e0e0" : "#000" }} />
           </IconButton>
-          <Button variant="contained" color="primary" onClick={handleSubmit}>
+          <Button
+            className="!bg-bh !text-white dark:!bg-bh-dark "
+            onClick={handleSubmit}
+          >
             Post
           </Button>
         </Box>

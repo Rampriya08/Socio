@@ -1,7 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Griffy&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gorditas&display=swap');
 
 body {
     font-family: 'Poppins', sans-serif;
@@ -9,6 +10,45 @@ body {
 }
 
 .dark {
-    background-color: #111827;
+    background-color: #f3f4f6;
     color: white;
 }
+/* Light Mode Scrollbar */
+.light-scrollbar::-webkit-scrollbar {
+  height: 8px;
+}
+.light-scrollbar::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+.light-scrollbar::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+
+/* Dark Mode Scrollbar */
+.dark-scrollbar::-webkit-scrollbar {
+  height: 8px;
+}
+.dark-scrollbar::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 4px;
+}
+.dark-scrollbar::-webkit-scrollbar-track {
+  background: #222;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;  /* Hide scrollbar for Chrome, Safari, and Edge */
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;  /* Hide scrollbar for IE and Edge */
+  scrollbar-width: none;  /* Hide scrollbar for Firefox */
+}
+.griffy-text {
+  font-family: 'Griffy', cursive;
+
+}
+.sunshine{
+  font-family: 'Gorditas',cursive;
+}
+
