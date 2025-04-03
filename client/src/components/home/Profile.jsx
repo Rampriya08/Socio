@@ -28,15 +28,7 @@ const ProfilePage = ({darkMode,setDarkMode}) => {
 
     const { userId } = useParams();
     const navigate = useNavigate();
-    useEffect(() => {
-      if (darkMode) {
-        document.documentElement.classList.add("dark");
-        localStorage.setItem("theme", "dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-        localStorage.setItem("theme", "light");
-      }
-    }, [darkMode]);
+   
 const tabVariants = {
   hidden: {
     opacity: 0,
@@ -304,7 +296,7 @@ const handleUserClick = (userId) => {
                   className={`text-sm font-semibold px-4 py-1 rounded-md  ${
                     userFollowingList.includes(userData.username)
                       ? "bg-red-500 text-white hover:bg-red-600"
-                      : "bg-blue-500 text-white hover:bg-blue-600"
+                      : "bg-bh text-white hover:bg-bh-dark"
                   }`}
                 >
                   {userFollowingList.includes(userData.username)

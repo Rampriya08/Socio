@@ -44,50 +44,62 @@ const CreatePost = ({ onPostCreated }) => {
     };
 
     const handleSubmit = async () => {
-        const token = localStorage.getItem("token");
-        const user = JSON.parse(localStorage.getItem("user"));
-        const formData = new FormData();
-        formData.append("userId", user ? user.username : " ");
-        formData.append("description", text);
-        if (selectedFile) {
-            formData.append("picture", selectedFile);
-            formData.append("picturePath", selectedFile.name);
+      const token = localStorage.getItem("token");
+      const user = JSON.parse(localStorage.getItem("user"));
+      const formData = new FormData();
+      formData.append("userId", user ? user.username : " ");
+      formData.append("description", text);
+      if (selectedFile) {
+        formData.append("picture", selectedFile);
+        formData.append("picturePath", selectedFile.name);
+      }
+
+      try {
+        const response = await fetch(`http://localhost:5000/api/posts/add`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        });
+
+        if (!response.ok) {
+          // Handle error response properly
+          const errorData = await response.json();
+          throw new Error(errorData.message || "Something went wrong");
         }
 
-        try {
-            const response = await fetch(`http://localhost:5000/api/posts/add`, {
-                method: "POST",
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-                body: formData,
-            });
+        const newPost = await response.json();
 
-            const newPost = await response.json();
+        showToast("success", "Post created successfully!");
 
-            // Create a post object that matches the structure expected by the Posts component
-            const formattedPost = {
-                _id: newPost._id,
-                username: user.username,
-                caption: text,
-                image_url: newPost.image_url,
-                likes_count: 0,
-                comments: [],
-                created_at: new Date().toISOString()
-            };
+        if (newPost) {
+          console.log(newPost);
+          console.log(newPost.image_url);
 
-            // Call the callback with the new post data
+          const formattedPost = {
+            _id: newPost.post._id,
+            username: user.username,
+            caption: text,
+            image_url: newPost.post.image_url,
+            likes_count: 0,
+            created_at: new Date().toISOString(),
+          };
+
+          setTimeout(() => {
             onPostCreated(formattedPost);
-
-            // Reset form
-            setText("");
-            setSelectedFile(null);
-            showToast("success","Post created successfully!");
-        } catch (error) {
-            console.error(error);
-            showToast("error","Failed to create post. " + error);
+          }, 2000);
         }
+
+        // Reset form
+        setText("");
+        setSelectedFile(null);
+      } catch (error) {
+        console.error(error);
+        showToast("error", "Failed to create post: " + error.message);
+      }
     };
+
     return (
       <Box className=" bg-white mr-2 ml-2  text-black dark:bg-gray-800 dark:text-white p-4 pt-8 rounded-lg shadow-right-bottom hover:shadow-hover-right-bottom transition border-r-2 border-b-2 border-bh">
         {/* Input Section */}
@@ -110,7 +122,7 @@ const CreatePost = ({ onPostCreated }) => {
             sx={{
               borderRadius: "8px",
             }}
-            className=" bg-white text-black dark:bg-gray-900 dark:text-white "
+            className=" bg-white text-black dark:bg-gray-900 dark:text-white sunshine"
           />
         </Box>
 
@@ -165,7 +177,7 @@ const CreatePost = ({ onPostCreated }) => {
             <MicIcon sx={{ color: isDarkMode ? "#e0e0e0" : "#000" }} />
           </IconButton>
           <Button
-            className="!bg-bh !text-white dark:!bg-bh-dark "
+            className="!bg-bh !text-white dark:!bg-bh-dark !sunshine"
             onClick={handleSubmit}
           >
             Post
