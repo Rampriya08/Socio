@@ -37,10 +37,21 @@ const io = socketIo(server, {
 });
 
 // Update your Express CORS settings too
-app.use(cors({
-    origin: "http://localhost:3000",
-    credentials: true
-}));
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://starlit-brigadeiros-22b6f7.netlify.app",
+];
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true); // allow server-to-server requests
+      if (allowedOrigins.includes(origin)) callback(null, true);
+      else callback(new Error("Not allowed by CORS"));
+    },
+    credentials: true,
+  })
+);
+app.use(express.json());
 
 // Middleware
 app.use(cors());
@@ -50,23 +61,23 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // MongoDB Connection with enhanced logging
 mongoose
-    .connect("mongodb://localhost:27017/Socio", {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    })
-    .then(() => {
-        console.group("MongoDB Connection");
-        console.log("Status: Connected");
-        console.log("Timestamp:", new Date().toISOString());
-        console.groupEnd();
-    })
-    .catch((err) => {
-        console.group("MongoDB Error");
-        console.error("Status: Connection Failed");
-        console.error("Error:", err);
-        console.error("Timestamp:", new Date().toISOString());
-        console.groupEnd();
-    });
+  .connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.group("MongoDB Connection");
+    console.log("Status: Connected");
+    console.log("Timestamp:", new Date().toISOString());
+    console.groupEnd();
+  })
+  .catch((err) => {
+    console.group("MongoDB Error");
+    console.error("Status: Connection Failed");
+    console.error("Error:", err);
+    console.error("Timestamp:", new Date().toISOString());
+    console.groupEnd();
+  });
 
 // Routes
 app.use("/api/user", userRoutes);
