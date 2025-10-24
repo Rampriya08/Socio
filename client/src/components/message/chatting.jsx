@@ -134,7 +134,7 @@ const Chatting = ({ selectedUser, unread }) => {
     useEffect(() => {
         if (!selectedUser) return;
 
-        socketRef.current = io("http://localhost:5000", {
+        socketRef.current = io("https://socio-ymdb.onrender.com", {
             transports: ['websocket', 'polling'],
             reconnection: true,
             reconnectionAttempts: 5,
@@ -222,7 +222,7 @@ const Chatting = ({ selectedUser, unread }) => {
         const fetchMessages = async () => {
             try {
                 const response = await fetch(
-                    `http://localhost:5000/api/chat/${selectedUser._id}?userId=${user.id}`
+                    `https://socio-ymdb.onrender.com/api/chat/${selectedUser._id}?userId=${user.id}`
                 );
                 if (!response.ok) throw new Error("Failed to fetch chat history");
                 const data = await response.json();

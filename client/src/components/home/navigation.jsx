@@ -32,7 +32,7 @@ const Navbar = ({ darkMode, setDarkMode }) => {
     const fetchUsers = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/user/s/search?q=${searchTerm}`
+          `https://socio-ymdb.onrender.com/api/user/s/search?q=${searchTerm}`
         );
         if (!response.ok) throw new Error("Failed to fetch users");
         const data = await response.json();

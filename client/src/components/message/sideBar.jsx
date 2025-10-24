@@ -13,7 +13,7 @@ const Sidebar = ({ onUserSelect, onUnread }) => {
     const socketRef = React.useRef(null);
 //console.log(onlineUsers)
     useEffect(() => {
-        socketRef.current = io("http://localhost:5000", {
+        socketRef.current = io("https://socio-ymdb.onrender.com", {
             withCredentials: true,
             transports: ['websocket', 'polling']
         });
@@ -22,8 +22,8 @@ const Sidebar = ({ onUserSelect, onUnread }) => {
         const fetchInitialData = async () => {
             try {
                 const [usersRes, countsRes] = await Promise.all([
-                    axios.get("http://localhost:5000/api/user/"),
-                    axios.get(`http://localhost:5000/api/chat/unread-counts/${loggedInUserId.id}`)
+                    axios.get("https://socio-ymdb.onrender.com/api/user/"),
+                    axios.get(`https://socio-ymdb.onrender.com/api/chat/unread-counts/${loggedInUserId.id}`)
                 ]);
 
                 const filteredUsers = usersRes.data.filter(user => user._id !== loggedInUserId.id);
@@ -33,7 +33,7 @@ const Sidebar = ({ onUserSelect, onUnread }) => {
                 const usersWithMessages = await Promise.all(
                     filteredUsers.map(async (user) => {
                         const messagesRes = await axios.get(
-                            `http://localhost:5000/api/chat/latest-message/${loggedInUserId.id}/${user._id}`
+                            `https://socio-ymdb.onrender.com/api/chat/latest-message/${loggedInUserId.id}/${user._id}`
                         );
                         return {
                             ...user,

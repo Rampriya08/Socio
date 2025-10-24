@@ -8,7 +8,7 @@ const useOnlineUsers = () => {
 
     useEffect(() => {
         // Initialize socket connection
-        socketRef.current = io('http://localhost:5000');
+        socketRef.current = io('https://socio-ymdb.onrender.com');
 
         // Connect user
         if (loggedInUser) {

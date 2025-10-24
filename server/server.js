@@ -59,31 +59,14 @@ app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 
-// MongoDB Connection with enhanced logging
-mongoose
-  .connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.group("MongoDB Connection");
-    console.log("Status: Connected");
-    console.log("Timestamp:", new Date().toISOString());
-    console.groupEnd();
-  })
-  .catch((err) => {
-    console.group("MongoDB Error");
-    console.error("Status: Connection Failed");
-    console.error("Error:", err);
-    console.error("Timestamp:", new Date().toISOString());
-    console.groupEnd();
-  });
 
 // Routes
 app.use("/api/user", userRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/chat", chatRoutes);
-
+app.get("/", (req, res) => {
+  res.send("Server is running ✅");
+});
 // Track active chat windows for each user
 const { userActiveChats } = sharedState; // userId -> { socketId, activeChat }
 const onlineUsers = new Map(); // userId -> { socketId, username, lastActive, activeChat }
@@ -456,12 +439,19 @@ io.on("connection", (socket) => {
 startScheduledMessageProcessor(io, sharedState);
 
 // Start the server
-const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => {
-    console.group("Server Startup");
-    console.log("Status: Running");
-    console.log("Port:", PORT);
-    console.log("Start Time:", new Date().toISOString());
-    console.groupEnd();
-});
+mongoose
+  .connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("✅ MongoDB Connected");
+    startScheduledMessageProcessor(io, sharedState);
+    const PORT = process.env.PORT || 5000;
+    server.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+  })
+  .catch((err) => {
+    console.error("❌ MongoDB Connection Failed:", err.message);
+    process.exit(1);
+  });
 
