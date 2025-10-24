@@ -87,7 +87,7 @@ const UserProfile = ({ refreshTrigger, onFollowUpdate, onLikeUpdate }) => {
   const fetchFollowers= async()=>{
     try {
       const response = await axios.get(
-        `https://socio-ymdb.onrender.com/api/user/${userId.username}/followers`
+        `https://socio-gilt-two.vercel.app/api/user/${userId.username}/followers`
       );
       setFollowers(response.data);
       fetchProfilesForUsers(response.data);
@@ -99,7 +99,7 @@ const UserProfile = ({ refreshTrigger, onFollowUpdate, onLikeUpdate }) => {
    const fetchFollowing  = async () => {
      try {
        const response = await axios.get(
-         `https://socio-ymdb.onrender.com/api/user/${userId.username}/following`
+         `https://socio-gilt-two.vercel.app/api/user/${userId.username}/following`
        );
        setFollowing(response.data);
        fetchProfilesForUsers(response.data);
@@ -111,7 +111,7 @@ const UserProfile = ({ refreshTrigger, onFollowUpdate, onLikeUpdate }) => {
   const fetchProfilePic = async (username) => {
     try {
       const response = await axios.get(
-        `https://socio-ymdb.onrender.com/api/user/${username}`
+        `https://socio-gilt-two.vercel.app/api/user/${username}`
       );
       return response.data.profile_pic;
     } catch (error) {
@@ -137,7 +137,7 @@ const UserProfile = ({ refreshTrigger, onFollowUpdate, onLikeUpdate }) => {
     }
 
     try {
-      const url = `https://socio-ymdb.onrender.com/api/posts/${postId}/${
+      const url = `https://socio-gilt-two.vercel.app/api/posts/${postId}/${
         isLiked ? "unlike" : "like"
       }`;
       await axios.post(url, { username: userId.username });
@@ -174,7 +174,7 @@ const UserProfile = ({ refreshTrigger, onFollowUpdate, onLikeUpdate }) => {
       }
 
       const isFollowing = following.includes(username);
-      const url = `https://socio-ymdb.onrender.com/api/user/${username}/${
+      const url = `https://socio-gilt-two.vercel.app/api/user/${username}/${
         isFollowing ? "unfollow" : "follow"
       }`;
 
@@ -205,14 +205,14 @@ const UserProfile = ({ refreshTrigger, onFollowUpdate, onLikeUpdate }) => {
       let response;
 
       const responses = await axios.get(
-        `https://socio-ymdb.onrender.com/api/user/get/${userId.username}`
+        `https://socio-gilt-two.vercel.app/api/user/get/${userId.username}`
       );
       setUserData(responses.data);
 
       switch (activeTab) {
         case "posts":
           response = await axios.get(
-            `https://socio-ymdb.onrender.com/api/posts/${userId.username}/posts`
+            `https://socio-gilt-two.vercel.app/api/posts/${userId.username}/posts`
           );
           const postsWithLikes = response.data.map((post) => ({
             ...post,
@@ -222,14 +222,14 @@ const UserProfile = ({ refreshTrigger, onFollowUpdate, onLikeUpdate }) => {
           break;
         case "followers":
           response = await axios.get(
-            `https://socio-ymdb.onrender.com/api/user/${userId.username}/followers`
+            `https://socio-gilt-two.vercel.app/api/user/${userId.username}/followers`
           );
           setFollowers(response.data);
           fetchProfilesForUsers(response.data);
           break;
         case "following":
           response = await axios.get(
-            `https://socio-ymdb.onrender.com/api/user/${userId.username}/following`
+            `https://socio-gilt-two.vercel.app/api/user/${userId.username}/following`
           );
           setFollowing(response.data);
           fetchProfilesForUsers(response.data);
@@ -367,7 +367,7 @@ const UserProfile = ({ refreshTrigger, onFollowUpdate, onLikeUpdate }) => {
                           <div className="flex flex-col items-center justify-center text-center w-full">
                             {/* Post Image */}
                             <img
-                              src={`https://socio-ymdb.onrender.com${post.image_url}`}
+                              src={`https://socio-gilt-two.vercel.app${post.image_url}`}
                               alt="Post"
                               className="rounded-lg w-1/2 h-1/2"
                             />

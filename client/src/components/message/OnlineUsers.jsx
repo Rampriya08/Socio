@@ -8,7 +8,7 @@ const useOnlineUsers = () => {
 
     useEffect(() => {
         // Initialize socket connection
-        socketRef.current = io('https://socio-ymdb.onrender.com');
+        socketRef.current = io('https://socio-gilt-two.vercel.app');
 
         // Connect user
         if (loggedInUser) {

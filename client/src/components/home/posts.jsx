@@ -28,7 +28,7 @@ const Posts = ({
 
   const fetchPosts = async () => {
     try {
-      const response = await axios.get("https://socio-ymdb.onrender.com/api/posts/");
+      const response = await axios.get("https://socio-gilt-two.vercel.app/api/posts/");
       const postsWithLikes = response.data.map((post) => ({
         ...post,
         isLiked: post.liked_by.includes(user?.username),
@@ -43,7 +43,7 @@ const Posts = ({
 
       if (user) {
         const followingResponse = await axios.get(
-          `https://socio-ymdb.onrender.com/api/user/${user.username}/following`
+          `https://socio-gilt-two.vercel.app/api/user/${user.username}/following`
         );
         setFollowingList(followingResponse.data);
       }
@@ -58,7 +58,7 @@ const Posts = ({
         return { username, profile_pic: userProfiles[username] };
       try {
         const response = await axios.get(
-          `https://socio-ymdb.onrender.com/api/user/${username}`
+          `https://socio-gilt-two.vercel.app/api/user/${username}`
         );
         return { username, profile_pic: response.data.profile_pic };
       } catch (error) {
@@ -78,7 +78,7 @@ const Posts = ({
       return;
     }
     try {
-      const url = `https://socio-ymdb.onrender.com/api/posts/${postId}/${
+      const url = `https://socio-gilt-two.vercel.app/api/posts/${postId}/${
         isLiked ? "unlike" : "like"
       }`;
       await axios.post(url, { username: user.username });
@@ -109,7 +109,7 @@ const Posts = ({
     }
     try {
       const isFollowing = followingList.includes(username);
-      const url = `https://socio-ymdb.onrender.com/api/user/${username}/${
+      const url = `https://socio-gilt-two.vercel.app/api/user/${username}/${
         isFollowing ? "unfollow" : "follow"
       }`;
       const response = await axios.post(url, { userId: user.id });
@@ -165,7 +165,7 @@ const Posts = ({
           </div>
           <div className="flex flex-col items-center justify-center text-center">
             <img
-              src={`https://socio-ymdb.onrender.com${post.image_url}`}
+              src={`https://socio-gilt-two.vercel.app${post.image_url}`}
               alt="Post"
               className="rounded-lg w-1/2 h-auto border"
             />

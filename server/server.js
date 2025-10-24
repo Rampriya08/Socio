@@ -26,7 +26,7 @@ const logSocketEvent = (event, data) => {
 
 const io = socketIo(server, {
     cors: {
-        origin: "http://localhost:3000", // Your frontend URL
+        origin: ["http://localhost:3000","https://talkspace-socio.netlify.app"], // Your frontend URL
         methods: ["GET", "POST"],
         allowedHeaders: ["*"],
         credentials: true  // Add this if you're using credentials
