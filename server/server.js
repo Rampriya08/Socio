@@ -39,7 +39,7 @@ const io = socketIo(server, {
 // Update your Express CORS settings too
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://starlit-brigadeiros-22b6f7.netlify.app",
+  "https://talkspace-socio.netlify.app",
 ];
 app.use(
   cors({
