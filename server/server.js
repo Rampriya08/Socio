@@ -25,17 +25,12 @@ const logSocketEvent = (event, data) => {
 };
 
 const io = socketIo(server, {
-    cors: {
-        origin: ["http://localhost:3000","https://talkspace-socio.netlify.app"], // Your frontend URL
-        methods: ["GET", "POST"],
-        allowedHeaders: ["*"],
-        credentials: true  // Add this if you're using credentials
-    },
-    transports: ["websocket", "polling"],
-    pingTimeout: 60000,
-    pingInterval: 25000,
+  cors: {
+    origin: ["https://talkspace-socio.netlify.app"],
+    methods: ["GET", "POST"],
+  },
+  transports: ["polling"], // 👈 use only polling
 });
-
 // Update your Express CORS settings too
 const allowedOrigins = [
   "http://localhost:3000",
