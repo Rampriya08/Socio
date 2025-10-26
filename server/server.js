@@ -26,7 +26,7 @@ const logSocketEvent = (event, data) => {
 
 const io = socketIo(server, {
   cors: {
-    origin: ["https://talkspace-socio.netlify.app"],
+    origin: ["http://localhost:3000", "https://your-frontend.netlify.app"],
     methods: ["GET", "POST"],
   },
   transports: ["polling"], // 👈 use only polling

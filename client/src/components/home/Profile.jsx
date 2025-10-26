@@ -90,7 +90,7 @@ const buttonVariants = {
 const fetchFollowers = async () => {
   try {
     const response = await axios.get(
-      `https://socio-gilt-two.vercel.app/api/user/${userId}/followers`
+      `https://socio-d0dd.onrender.com/api/user/${userId}/followers`
     );
     setFollowers(response.data);
     fetchProfilePictures(response.data);
@@ -102,7 +102,7 @@ const fetchFollowers = async () => {
 const fetchFollowing = async () => {
   try {
     const response = await axios.get(
-      `https://socio-gilt-two.vercel.app/api/user/${userId}/following`
+      `https://socio-d0dd.onrender.com/api/user/${userId}/following`
     );
     setFollowing(response.data);
     fetchProfilePictures(response.data);
@@ -114,7 +114,7 @@ const fetchFollowing = async () => {
     // Fetch logged-in user's following list
     const fetchUserFollowingList = async (loggedInUserId) => {
         try {
-            const response = await axios.get(`https://socio-gilt-two.vercel.app/api/user/${loggedInUserId}/following`);
+            const response = await axios.get(`https://socio-d0dd.onrender.com/api/user/${loggedInUserId}/following`);
             setUserFollowingList(response.data);
         } catch (error) {
             console.error("Error fetching user following list:", error);
@@ -140,7 +140,7 @@ const handleLike = async (postId, isLiked) => {
   }
 
   try {
-    const url = `https://socio-gilt-two.vercel.app/api/posts/${postId}/${
+    const url = `https://socio-d0dd.onrender.com/api/posts/${postId}/${
       isLiked ? "unlike" : "like"
     }`;
     // console.log(user.username)
@@ -178,7 +178,7 @@ const handleFollowUnfollow = async (username) => {
     }
 
     const isFollowing = userFollowingList.includes(username);
-    const url = `https://socio-gilt-two.vercel.app/api/user/${username}/${
+    const url = `https://socio-d0dd.onrender.com/api/user/${username}/${
       isFollowing ? "unfollow" : "follow"
     }`;
 
@@ -204,11 +204,11 @@ const handleFollowUnfollow = async (username) => {
         setError(null);
 
         try {
-            const userResponse = await axios.get(`https://socio-gilt-two.vercel.app/api/user/get/${userId}`);
+            const userResponse = await axios.get(`https://socio-d0dd.onrender.com/api/user/get/${userId}`);
             setUserData(userResponse.data);
 
             if (activeTab === "posts") {
-                const postsResponse = await axios.get(`https://socio-gilt-two.vercel.app/api/posts/${userId}/posts`);
+                const postsResponse = await axios.get(`https://socio-d0dd.onrender.com/api/posts/${userId}/posts`);
                 const postsWithLikes = postsResponse.data.map((post) => ({
                   ...post,
                   isLiked: post.liked_by.includes(user?.username),
@@ -216,11 +216,11 @@ const handleFollowUnfollow = async (username) => {
                 setUserPosts(postsWithLikes);
 
             } else if (activeTab === "followers") {
-                const followersResponse = await axios.get(`https://socio-gilt-two.vercel.app/api/user/${userId}/followers`);
+                const followersResponse = await axios.get(`https://socio-d0dd.onrender.com/api/user/${userId}/followers`);
                 setFollowers(followersResponse.data);
                 fetchProfilePictures(followersResponse.data);
             } else if (activeTab === "following") {
-                const followingResponse = await axios.get(`https://socio-gilt-two.vercel.app/api/user/${userId}/following`);
+                const followingResponse = await axios.get(`https://socio-d0dd.onrender.com/api/user/${userId}/following`);
                 setFollowing(followingResponse.data);
                 fetchProfilePictures(followingResponse.data);
             }
@@ -237,7 +237,7 @@ const handleFollowUnfollow = async (username) => {
     };
     const fetchMutualFollowers = async (loggedInUserId, profileUserId) => {
         try {
-            const response = await axios.get(`https://socio-gilt-two.vercel.app/api/user/${loggedInUserId}/mutual-followers/${profileUserId}`);
+            const response = await axios.get(`https://socio-d0dd.onrender.com/api/user/${loggedInUserId}/mutual-followers/${profileUserId}`);
             setMutualFollowers(response.data);
         } catch (error) {
             console.error("Error fetching mutual followers:", error);
@@ -247,7 +247,7 @@ const handleFollowUnfollow = async (username) => {
         const profilePicsData = {};
         const profilePicPromises = users.map(async (user) => {
             try {
-                const response = await axios.get(`https://socio-gilt-two.vercel.app/api/user/${user}`);
+                const response = await axios.get(`https://socio-d0dd.onrender.com/api/user/${user}`);
                 profilePicsData[user] = response.data.profile_pic;
             } catch {
                 profilePicsData[user] = "https://via.placeholder.com/50"; // Default profile picture
@@ -401,7 +401,7 @@ const handleUserClick = (userId) => {
                                 <div className="flex flex-col items-center justify-center text-center w-full">
                                   {/* Post Image */}
                                   <img
-                                    src={`https://socio-gilt-two.vercel.app${post.image_url}`}
+                                    src={`https://socio-d0dd.onrender.com${post.image_url}`}
                                     alt="Post"
                                     className="rounded-lg w-1/2 h-1/2"
                                   />

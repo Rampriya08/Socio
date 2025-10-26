@@ -13,17 +13,24 @@ const Sidebar = ({ onUserSelect, onUnread }) => {
     const socketRef = React.useRef(null);
 //console.log(onlineUsers)
     useEffect(() => {
-        socketRef.current = io("https://socio-gilt-two.vercel.app", {
-            withCredentials: true,
-            transports: ['websocket', 'polling']
+        socketRef.current = io("https://socio-d0dd.onrender.com", {
+          transports: ["polling"],
+        
+        });
+        socketRef.current.on("connect", () => {
+          console.log("✅ Connected to socket:", socketRef.current.id);
+        });
+
+        socketRef.current.on("connect_error", (err) => {
+          console.error("❌ Socket connection error:", err.message);
         });
 
         // Initial data fetch
         const fetchInitialData = async () => {
             try {
                 const [usersRes, countsRes] = await Promise.all([
-                    axios.get("https://socio-gilt-two.vercel.app/api/user/"),
-                    axios.get(`https://socio-gilt-two.vercel.app/api/chat/unread-counts/${loggedInUserId.id}`)
+                    axios.get("https://socio-d0dd.onrender.com/api/user/"),
+                    axios.get(`https://socio-d0dd.onrender.com/api/chat/unread-counts/${loggedInUserId.id}`)
                 ]);
 
                 const filteredUsers = usersRes.data.filter(user => user._id !== loggedInUserId.id);
@@ -33,7 +40,7 @@ const Sidebar = ({ onUserSelect, onUnread }) => {
                 const usersWithMessages = await Promise.all(
                     filteredUsers.map(async (user) => {
                         const messagesRes = await axios.get(
-                            `https://socio-gilt-two.vercel.app/api/chat/latest-message/${loggedInUserId.id}/${user._id}`
+                            `https://socio-d0dd.onrender.com/api/chat/latest-message/${loggedInUserId.id}/${user._id}`
                         );
                         return {
                             ...user,

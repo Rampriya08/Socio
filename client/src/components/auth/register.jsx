@@ -20,7 +20,7 @@ const Register = () => {
         const userData = { username, email, password, gender,bio };
 
         try {
-            const response = await fetch("https://socio-gilt-two.vercel.app/api/user/register", {
+            const response = await fetch("https://socio-d0dd.onrender.com/api/user/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

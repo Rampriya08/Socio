@@ -32,7 +32,7 @@ const Navbar = ({ darkMode, setDarkMode }) => {
     const fetchUsers = async () => {
       try {
         const response = await fetch(
-          `https://socio-gilt-two.vercel.app/api/user/s/search?q=${searchTerm}`
+          `https://socio-d0dd.onrender.com/api/user/s/search?q=${searchTerm}`
         );
         if (!response.ok) throw new Error("Failed to fetch users");
         const data = await response.json();

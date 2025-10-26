@@ -20,7 +20,7 @@ const Login = () => {
     const handleLogin = async () => {
         const loginData = { username, password };
         try {
-            const response = await fetch("https://socio-gilt-two.vercel.app/api/user/login", {
+            const response = await fetch("https://socio-d0dd.onrender.com/api/user/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

@@ -28,7 +28,7 @@ const CreatePost = ({ onPostCreated }) => {
             const user = JSON.parse(localStorage.getItem("user")); // Get user from localStorage
             if (user) {
                 try {
-                    const response = await axios.get(`https://socio-gilt-two.vercel.app/api/user/${user.username}`);
+                    const response = await axios.get(`https://socio-d0dd.onrender.com/api/user/${user.username}`);
                     setProfilePic(response.data.profile_pic); // Assuming `profilePic` is the field for the image URL
                 } catch (error) {
                     console.error("Error fetching user profile:", error);
@@ -55,7 +55,7 @@ const CreatePost = ({ onPostCreated }) => {
       }
 
       try {
-        const response = await fetch(`https://socio-gilt-two.vercel.app/api/posts/add`, {
+        const response = await fetch(`https://socio-d0dd.onrender.com/api/posts/add`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,

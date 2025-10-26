@@ -134,12 +134,9 @@ const Chatting = ({ selectedUser, unread }) => {
     useEffect(() => {
         if (!selectedUser) return;
 
-        socketRef.current = io("https://socio-gilt-two.vercel.app", {
-            transports: ['websocket', 'polling'],
-            reconnection: true,
-            reconnectionAttempts: 5,
-            reconnectionDelay: 1000,
-            withCredentials: true
+        socketRef.current = io("https://socio-d0dd.onrender.com", {
+            transports: [ 'polling'],
+            
         });
         const handleReceiveMessage = (newMessage) => {
             //console.log("Unread" + unreadCountRef.current);
@@ -222,7 +219,7 @@ const Chatting = ({ selectedUser, unread }) => {
         const fetchMessages = async () => {
             try {
                 const response = await fetch(
-                    `https://socio-gilt-two.vercel.app/api/chat/${selectedUser._id}?userId=${user.id}`
+                    `https://socio-d0dd.onrender.com/api/chat/${selectedUser._id}?userId=${user.id}`
                 );
                 if (!response.ok) throw new Error("Failed to fetch chat history");
                 const data = await response.json();
